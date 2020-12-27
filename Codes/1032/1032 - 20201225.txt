@@ -1,0 +1,47 @@
+#include <stdio.h>
+#include <iostream>
+#include <string>
+
+#define MAX_BOARD_SIZE 8
+
+using namespace std;
+
+int main()
+{
+	int numLimit = 0;
+	string listQues[50]; // 동적 할당을 시도했으나, 넘우 귀찮아서 그냥 50으로 맞췄읍니다.
+	string strAns = ""; // 답을 기록하는 변수
+	
+	cin >> numLimit;
+	// 이 For문이 제시된 텍스트를 저장한다.
+	for (int iterGet = 0; iterGet < numLimit; iterGet++)
+	{
+		cin >> listQues[iterGet];
+	}
+
+	int numStrLen = listQues[0].length();
+	int numiterChk;
+	for (int iterLim = 0; iterLim < numStrLen; iterLim++)
+	{
+		char strCmp = listQues[0][iterLim];
+		numiterChk = 0;
+		for (int iterChar = 0; iterChar < numLimit; iterChar++)
+		{
+			if (listQues[iterChar][iterLim] != strCmp) {
+				break;
+			}
+			numiterChk++;
+		}
+		if (numiterChk == numLimit) {
+			strAns += strCmp;
+		}
+		else {
+			strAns += "?";
+		}
+	}
+
+	cout << strAns << endl;
+
+	delete[] listQues;
+	return 0;
+}
