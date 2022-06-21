@@ -1,0 +1,59 @@
+#include <iostream>
+#include <string>
+#include <list>
+
+using namespace std;
+
+int main(void) {
+	
+	// 입력 고속화
+	ios::sync_with_stdio(0);
+	cin.tie(0);
+
+	string strTar;
+	int numLim;
+	char charComm, charInput;
+	list<char> editor;
+	
+	cin >> strTar;
+	for (int i = 0; i < strTar.size(); i++)
+	{
+		editor.push_back(strTar[i]);
+	}
+
+	cin >> numLim;
+	list<char>::iterator cursor = editor.end();
+	for (int j = 0; j < numLim; j++)
+	{
+		cin >> charComm;
+		if (charComm == 'L') {
+			if (cursor != editor.begin()) {
+				cursor--;
+			}
+		}
+		else if (charComm == 'D') {
+			if (cursor != editor.end()) {
+				cursor++;
+			}
+		}
+		else if (charComm == 'B') {
+			if (cursor != editor.begin()) {
+				cursor--;
+				cursor = editor.erase(cursor);
+			}
+		}
+		else if (charComm == 'P') {
+			cin >> charInput;	
+			editor.insert(cursor, charInput);
+		}
+		else {
+			cout << "ERROR OCCURED" << "\n";
+		}
+	}
+
+	for (char c : editor) {
+		cout << c;
+	}
+
+	return 0;
+}
