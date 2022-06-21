@@ -1,0 +1,19 @@
+#include <iostream>
+#define ALPHABET_SIZE 26
+using namespace std;
+int main(void) {
+	int listAlpha[ALPHABET_SIZE] = { 0, };
+	string strTarget = "";
+	cin >> strTarget;
+
+	for (int i = 0; i < strTarget.size(); i++)
+	{
+		listAlpha[strTarget[i] - 97]++;
+	}
+
+	for (int j = 0; j < ALPHABET_SIZE; j++) {
+		cout << listAlpha[j] << " ";
+	}
+	return 0;
+}
+
