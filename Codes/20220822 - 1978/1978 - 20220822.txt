@@ -1,0 +1,25 @@
+fun main(args: Array<String>) = with (System.`in`.bufferedReader()) {
+    val lim = readLine().toInt()
+    if (lim == 0) {
+        println(0)
+        return
+    }
+    val targets = readLine().split(" ").map {it.toInt()}
+
+    var cnt : Int; var ans = 0; var chk = true
+    for (iter in targets) {
+        cnt = 2
+        chk = true
+        if (iter == 1) continue
+        while (cnt * cnt <= iter) {
+            if (iter % cnt == 0) {
+                chk = false
+                break
+            }
+            cnt++
+        }
+        if (chk) ans++
+    }
+
+    println(ans)
+}

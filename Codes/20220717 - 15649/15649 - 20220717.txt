@@ -1,0 +1,47 @@
+#include <iostream>
+
+using namespace std;
+int listy[8] = { 0, };
+bool chkList[8] = { false, };
+
+void Liner(int& n, int& m, int idx) {
+	if (idx == m - 1) {
+		for (int i = 0; i < n; i++)
+		{
+			if (!chkList[i]) {
+				// 출력용
+				for (int j = 0; j < m - 1; j++)
+				{
+					cout << listy[j] << " ";
+				}
+				cout << i + 1 << "\n";
+			}
+		}
+	}
+	else {
+		for (int k = 0; k < n; k++)
+		{
+			if (!chkList[k]) {
+				listy[idx] = k + 1;
+				chkList[k] = true;
+				Liner(n, m, idx + 1);
+				chkList[k] = false;
+			}
+		}
+	}
+}
+
+int main(void) {
+
+	// 입력 고속화
+	ios::sync_with_stdio(0);
+	cin.tie(0);
+	cout.tie(0);
+
+	int n, m; // n은 최대 수, m은 수열 길이
+	cin >> n >> m;
+
+	Liner(n, m, 0);
+
+	return 0;
+}

@@ -1,0 +1,43 @@
+#include <iostream>
+
+using namespace std;
+
+int listy[20] = { 0, };
+int n, s, cnt = 0;
+
+void pluser(int idx, int amt) {
+	if (n == idx) {
+		if (amt == s) {
+			cnt++;
+		}
+		return;
+	}
+	else {
+		pluser(idx + 1, amt);
+		pluser(idx + 1, amt + listy[idx]);
+	}
+}
+
+int main(void) {
+
+	// 입력 고속화
+	ios::sync_with_stdio(0);
+	cin.tie(0);
+	cout.tie(0);
+
+	cin >> n >> s;
+
+	for (int i = 0; i < n; i++) {
+		cin >> listy[i];
+	}
+
+	pluser(0, 0);
+	if (s == 0) {
+		cout << cnt - 1;
+	}
+	else {
+		cout << cnt;
+	}
+
+	return 0;
+}

@@ -1,0 +1,52 @@
+import java.io.BufferedWriter
+import java.io.OutputStreamWriter
+
+fun gcd(a : Int, b : Int): Int {
+    var ta = a; var tb = b; var tmp : Int
+    while (tb > 0) {
+        tmp = tb
+        tb = ta % tb
+        ta = tmp
+    }
+    return ta
+}
+
+fun lcm(a : Int, b : Int) : Int {
+    return a / gcd(a, b) * b
+}
+
+fun main() = with (System.`in`.bufferedReader()) {
+    val rep = readLine().toInt()
+    var M : Int; var N : Int; var x : Int; var y : Int; var ans : Int; var numLcm : Int
+    var inputList : List<Int>
+    val mYearArray = ArrayList<Int>()
+    val bw = BufferedWriter(OutputStreamWriter(System.out))
+
+    repeat(rep) {
+        inputList = readLine().split(" ").map { it.toInt() }
+        M = inputList[0]; N = inputList[1]; x = inputList[2]; y = inputList[3]
+        if (M == x) x = 0
+        if (N == y) y = 0
+        numLcm = lcm(M, N)
+        ans = -1
+        mYearArray.clear()
+
+        for (i in x..numLcm step M) {
+            mYearArray.add(i)
+        }
+
+        if (mYearArray[0] == 0) mYearArray.removeAt(0)
+
+        for (iter in mYearArray) {
+            if (iter % N == y) {
+                ans = iter
+                break
+            }
+        }
+
+        bw.write("$ans\n")
+    }
+
+    bw.flush()
+    bw.close()
+}

@@ -1,0 +1,45 @@
+import kotlin.math.max
+
+fun main() = with (System.`in`.bufferedReader()) {
+    val lim = readLine().toInt()
+    val targets = IntArray(lim)
+    var twoTargets = IntArray(lim * lim)
+
+    repeat(lim) {
+        targets[it] = readLine().toInt()
+    }
+    targets.sort()
+
+    for (i in targets.indices) {
+        for (j in targets.indices) {
+            twoTargets[lim * i + j] = targets[i] + targets[j]
+        }
+    }
+
+    twoTargets = twoTargets.distinct().sorted().toIntArray()
+    var left : Int; var right : Int; var mid : Int
+    var tmper : Int; var numHigh = 0
+    for (k in lim - 1 downTo 1) {
+        for (q in 0..k) {
+            left = 0
+            right = twoTargets.size - 1
+            tmper = targets[k] - targets[q]
+            while (left <= right) {
+                mid = (left + right) / 2
+                if (twoTargets[mid] == tmper) {
+                    numHigh = max(tmper + targets[q], numHigh)
+                    break
+                }
+                else if (twoTargets[mid] > tmper)  right = mid - 1
+                else                            left = mid + 1
+            }
+        }
+    }
+
+    println(numHigh)
+}
+
+//    val bw = BufferedWriter(OutputStreamWriter(System.out))
+//    bw.flush()
+//    bw.close()
+//}

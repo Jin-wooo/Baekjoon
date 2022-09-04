@@ -1,0 +1,66 @@
+import java.io.BufferedWriter
+import java.io.OutputStreamWriter
+
+fun main() = with (System.`in`.bufferedReader()) {
+    val lim = readLine().toInt()
+    val points = readLine().split(" ").map { it.toInt() }
+    val sortedPt = points.sorted()
+    val cleanedPt = arrayListOf<Int>()
+    var oldVal = 1000000001; var newVal = 0
+    val bw = BufferedWriter(OutputStreamWriter(System.out))
+
+    repeat(lim) {
+        newVal = sortedPt[it]
+        if (newVal != oldVal) {
+            cleanedPt.add(newVal)
+        }
+        oldVal = newVal
+    }
+
+    var left : Int; var right : Int; var mid : Int
+    for (iter in points) {
+        left = 0; right = cleanedPt.size - 1
+        while (left <= right) {
+            mid = (left + right) / 2
+            if (cleanedPt[mid] == iter) {
+                bw.write("$mid ")
+                break
+            }
+            else if (cleanedPt[mid] > iter) right = mid - 1
+            else left = mid + 1
+        }
+    }
+
+    bw.flush()
+    bw.close()
+}	
+
+
+//distinct ver.
+
+import java.io.BufferedWriter
+import java.io.OutputStreamWriter
+
+fun main() = with (System.`in`.bufferedReader()) {
+    readLine().toInt()
+    val points = readLine().split(" ").map { it.toInt() }
+    val cleanedPt = points.sorted().distinct()
+    val bw = BufferedWriter(OutputStreamWriter(System.out))
+
+    var left : Int; var right : Int; var mid : Int
+    for (iter in points) {
+        left = 0; right = cleanedPt.size - 1
+        while (left <= right) {
+            mid = (left + right) / 2
+            if (cleanedPt[mid] == iter) {
+                bw.write("$mid ")
+                break
+            }
+            else if (cleanedPt[mid] > iter) right = mid - 1
+            else left = mid + 1
+        }
+    }
+
+    bw.flush()
+    bw.close()
+}

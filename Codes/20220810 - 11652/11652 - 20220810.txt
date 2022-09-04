@@ -1,0 +1,32 @@
+fun main(args: Array<String>) = with (System.`in`.bufferedReader()) {
+    val numCard = readLine().toInt()
+    val cards = LongArray(numCard)
+
+    repeat(numCard) {
+        cards[it] = readLine().toLong()
+    }
+
+    cards.sort()
+
+    var tmpCard: Long = Long.MAX_VALUE - 1
+    var tmpPt: Int = 0
+    var highCard: Long = 0
+    var highPt: Int = 0
+    for (iter in cards) {
+        if (tmpCard == iter) {
+            tmpPt++
+        } else {
+            if (highPt < tmpPt) {
+                highCard = tmpCard
+                highPt = tmpPt
+            }
+            tmpCard = iter
+            tmpPt = 1
+        }
+    }
+    if (highPt < tmpPt) {
+        highCard = tmpCard
+    }
+
+    println(highCard)
+}

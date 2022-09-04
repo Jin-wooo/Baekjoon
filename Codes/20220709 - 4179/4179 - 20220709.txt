@@ -1,0 +1,118 @@
+#include <iostream>
+#include <queue>
+#include <string>
+
+#define Y first
+#define X second
+#define WAYPT 4
+
+using namespace std;
+
+int main(void) {
+
+	// 입력 고속화
+	ios::sync_with_stdio(0);
+	cin.tie(0);
+
+	int numX, numY, tmpX, tmpY;
+	string strLine;
+	bool canEscape = true, isEscaped = false;
+	string maze[1002];
+	unsigned short listTime[1002][1002] = { 0, };
+	int yWay[4] = { -1, 0, 1, 0 };
+	int xWay[4] = { 0, 1, 0, -1};
+	pair<short, short> tmpFire, tmpMan;
+	queue<pair<short, short>> queFire;
+	queue<pair<short, short>> queMan;
+
+	cin >> numY >> numX;
+	cin.ignore();
+
+	// 미로 생성
+	for (int y = 0; y < numY; y++)
+	{
+		getline(cin, strLine);
+		maze[y] = strLine;
+		for (int x = 0; x < numX; x++)
+		{
+			if (maze[y][x] == 'F') {
+				queFire.push(make_pair(y, x));
+			}
+			else if (maze[y][x] == 'J') {
+				queMan.push(make_pair(y, x));
+				maze[y][x] = '.';
+			}
+		}
+	}
+	queMan.push(make_pair(-1, -1));
+	queFire.push(make_pair(-1, -1));
+
+
+	while (canEscape && !isEscaped)
+	{
+		tmpFire = queFire.front();
+		queFire.pop();
+		while (tmpFire.X != -1)
+		{
+			for (int f = 0; f < WAYPT; f++)
+			{
+				tmpY = tmpFire.Y + yWay[f];
+				tmpX = tmpFire.X + xWay[f];
+				if (tmpY < 0 || tmpY >= numY ||
+					tmpX < 0 || tmpX >= numX) {
+					// 범위 초과
+					continue;
+				}
+
+				if (maze[tmpY][tmpX] == '.') {
+					queFire.push(make_pair(tmpY, tmpX));
+					maze[tmpY][tmpX] = 'F';
+				}
+			}
+			tmpFire = queFire.front();
+			queFire.pop();
+		}
+		queFire.push(make_pair(-1, -1));
+
+		tmpMan = queMan.front();
+		queMan.pop();
+		while (tmpMan.X != -1)
+		{
+			if (tmpMan.Y == 0 || tmpMan.Y == numY - 1 || 
+				tmpMan.X == 0 || tmpMan.X == numX - 1) {
+				// 탈출 성공!
+				isEscaped = true;
+				break;
+			}
+			for (int f = 0; f < WAYPT; f++)
+			{
+				tmpY = tmpMan.Y + yWay[f];
+				tmpX = tmpMan.X + xWay[f];
+				if (tmpY < 0 || tmpY >= numY ||
+					tmpX < 0 || tmpX >= numX) {
+					// 범위 초과
+					continue;
+				}
+				if (maze[tmpY][tmpX] == '.' && listTime[tmpY][tmpX] == 0) {
+					queMan.push(make_pair(tmpY, tmpX));
+					listTime[tmpY][tmpX] = listTime[tmpMan.Y][tmpMan.X] + 1;
+				}
+			}
+			tmpMan = queMan.front();
+			queMan.pop();
+		}
+
+		if (queMan.empty() && !isEscaped) {
+			// 이동 불가
+			cout << "IMPOSSIBLE";
+			return 0;
+		}
+		else {
+			// 아직 이동 가능
+			queMan.push(make_pair(-1, -1));
+		}
+	}
+
+	cout << listTime[tmpMan.Y][tmpMan.X] + 1;
+	return 0;
+}

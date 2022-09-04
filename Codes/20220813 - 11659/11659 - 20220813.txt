@@ -1,0 +1,27 @@
+import java.io.BufferedWriter
+import java.io.OutputStreamWriter
+
+fun main(args: Array<String>) = with (System.`in`.bufferedReader()) {
+    val (numLim, quesLim) = readLine().split(" ").map { it.toInt() }
+    val readArray = readLine().split(" ").map { it.toInt() }.toIntArray()
+    val stepArray = IntArray(numLim + 1)
+    val ansArray = IntArray(quesLim)
+
+    stepArray[0] = 0
+
+    for (i in 1..numLim) {
+        stepArray[i] = stepArray[i - 1] + readArray[i - 1]
+    }
+    var a : List<Int>
+    repeat(quesLim) {
+        a = readLine().split(" ").map { it.toInt() }
+        ansArray[it] = stepArray[a[1]] - stepArray[a[0] - 1]
+    }
+    val bw = BufferedWriter(OutputStreamWriter(System.out))
+
+    for (iter in ansArray) {
+        bw.write(iter.toString() + "\n")
+    }
+    bw.flush()
+    bw.close()
+}

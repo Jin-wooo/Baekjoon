@@ -1,0 +1,17 @@
+import kotlin.math.max
+
+fun main(args: Array<String>) = with (System.`in`.bufferedReader()) {
+    val ropes = readLine().toInt()
+    val ropeArray = IntArray(ropes)
+    repeat(ropes) {
+        ropeArray[it] = readLine().toInt()
+    }
+    ropeArray.sortDescending()
+
+    var numWeight = 0
+    var pastWeight = 0
+    for (i in ropeArray.indices) {
+        numWeight = max(numWeight, ropeArray[i] * (i + 1))
+    }
+    println(numWeight)
+}

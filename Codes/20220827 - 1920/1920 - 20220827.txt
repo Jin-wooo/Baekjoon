@@ -1,0 +1,40 @@
+import java.io.BufferedWriter
+import java.io.OutputStreamWriter
+import kotlin.time.Duration
+import kotlin.time.ExperimentalTime
+import kotlin.time.measureTimedValue
+
+fun main() = with (System.`in`.bufferedReader()) {
+    val n = readLine().toInt()
+    val findArray = readLine().split(" ").map {it.toInt()}.toIntArray()
+    val m = readLine().toInt()
+    val quesArray = readLine().split(" ").map {it.toInt()}.toIntArray()
+
+    var left = 0; var right = 0; var mid : Int
+    val bw = BufferedWriter(OutputStreamWriter(System.out))
+
+    findArray.sort()
+    for (iter in quesArray) {
+        right = n - 1
+        left = 0
+        while (left <= right) {
+            mid = (right + left) / 2
+            if (findArray[mid] == iter) {
+                bw.write("1\n")
+                break
+            }
+            else if (findArray[mid] > iter) {
+                right = mid - 1
+            }
+            else {
+                left = mid + 1
+            }
+        }
+        if (left > right) {
+            bw.write("0\n")
+        }
+    }
+
+    bw.flush()
+    bw.close()
+}

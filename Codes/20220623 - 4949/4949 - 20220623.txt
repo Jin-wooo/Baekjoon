@@ -1,0 +1,63 @@
+#include <iostream>
+#include <string>
+#include <vector>
+#include <stack>
+
+using namespace std;
+
+int main(void) {
+
+	// 입력 고속화
+	ios::sync_with_stdio(0);
+	cin.tie(0);
+
+	string strLine;
+	stack<char> stackBalance;
+	vector<bool> vecAns;
+	getline(cin, strLine);
+	stackBalance.push('1');
+
+	// 입력 처리 시작
+	while (strLine.compare(".") != 0) {
+		for (int i = 0; i < strLine.size(); i++)
+		{
+			if (strLine[i] == '(' || strLine[i] == '[') {
+				stackBalance.push(strLine[i]);
+			}
+			else if ((stackBalance.top() != '(' && strLine[i] == ')') 
+				|| (stackBalance.top() != '[' && strLine[i] == ']')) {
+				vecAns.push_back(false);
+				break;
+			}
+			else if ((stackBalance.top() == '(' && strLine[i] == ')')
+				|| (stackBalance.top() == '[' && strLine[i] == ']')) {
+				stackBalance.pop();
+			}
+			else if (strLine[i] == '.') {
+				if (stackBalance.top() != '1') { 
+					vecAns.push_back(false); 
+				}
+				else { 
+					vecAns.push_back(true); 
+				}
+			}
+		}
+		getline(cin, strLine);
+		while (stackBalance.top() != '1')
+		{
+			stackBalance.pop();
+		}
+	}
+
+	for (int ans : vecAns) {
+		if (ans) {
+			cout << "yes" << "\n";
+		}
+		else {
+			cout << "no" << "\n";
+		}
+	}
+
+	getchar();
+	return 0;
+}

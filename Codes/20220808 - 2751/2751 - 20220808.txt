@@ -1,0 +1,43 @@
+import java.io.BufferedWriter
+import java.io.OutputStreamWriter
+import java.util.*
+
+var list = IntArray(0)
+
+fun mergeSort(tarList: IntArray) : IntArray{
+    if (tarList.size == 1) {
+        return tarList
+    }
+    val mid =
+        if (tarList.size % 2 == 0) tarList.size / 2 - 1 else tarList.size / 2
+
+    val fList = mergeSort(tarList.sliceArray(0..mid))
+    val bList = mergeSort(tarList.sliceArray(mid + 1 until tarList.size))
+
+    var fIdx = 0
+    var bIdx = 0
+    val retList = IntArray(tarList.size)
+    for (i in retList.indices) {
+        if (fIdx == fList.size) retList[i] = bList[bIdx++]
+        else if (bIdx == bList.size) retList[i] = fList[fIdx++]
+        else if (fList[fIdx] > bList[bIdx]) retList[i] = bList[bIdx++]
+        else retList[i] = fList[fIdx++]
+    }
+
+    return retList
+}
+
+fun main(args: Array<String>) = with(System.`in`.bufferedReader()) {
+    val lim = readLine().toInt()
+    list = IntArray(lim)
+    repeat(lim) {
+        list[it] = readLine().toInt()
+    }
+
+    val ansList = mergeSort(list)
+
+    val bw = BufferedWriter(OutputStreamWriter(System.out))
+    bw.write(ansList.joinToString("\n"))
+    bw.flush()
+    bw.close()
+}

@@ -1,0 +1,51 @@
+#include <iostream>
+#include <queue>
+
+using namespace std;
+
+int main(void) {
+
+	// 입력 고속화
+	ios::sync_with_stdio(0);
+	cin.tie(0);
+
+	int numST, numED, tmpPt, tmpIdx;
+	bool isFound = false;
+	queue<int> quePt;
+
+	// 숨바꼭질 위치 표시
+	int listLine[100101] = { 0, };
+
+	cin >> numST >> numED;
+	quePt.push(numST);
+
+	while (!isFound && !quePt.empty())
+	{
+		tmpPt = quePt.front();
+		quePt.pop();
+
+		if (tmpPt == numED) {
+			isFound = true;
+		}
+		else {
+			tmpIdx = tmpPt + 1;
+			if (tmpIdx <= 100000 && listLine[tmpIdx] == 0) {
+				listLine[tmpIdx] = listLine[tmpPt] + 1;
+				quePt.push(tmpIdx);
+			}
+			tmpIdx = tmpPt - 1;
+			if (tmpIdx >= 0 && listLine[tmpIdx] == 0) {
+				listLine[tmpIdx] = listLine[tmpPt] + 1;
+				quePt.push(tmpIdx);
+			}
+			tmpIdx = tmpPt * 2;
+			if (tmpIdx <= 100000 && listLine[tmpIdx] == 0) {
+				listLine[tmpIdx] = listLine[tmpPt] + 1;
+				quePt.push(tmpIdx);
+			}
+		}
+	}
+
+	cout << listLine[numED];
+	return 0;
+}

@@ -1,0 +1,58 @@
+#include <iostream>
+#include <vector>
+#include <string>
+#include <queue>
+
+#define Y first
+#define X second
+#define NUM_WAYPOINT 4
+
+using namespace std;
+
+int main(void) {
+
+	// 입력 고속화
+	ios::sync_with_stdio(0);
+	cin.tie(0);
+	string strMaze;
+	int numX, numY, tmpX, tmpY, numPt, numBase;
+	cin >> numY >> numX;
+
+	vector<bool> vecAns;
+	queue<pair<int, int>> queDot; // Y = first | X = second
+	pair<int, int> tmpDot;
+	int listMaze[102][102] = { 0, };
+	int listYDir[4] = { -1, 0, 1, 0 };
+	int listXDir[4] = { 0, 1, 0, -1 };
+	int listValue[102][102] = { 0, };
+	cin.ignore();
+	for (int i = 1; i <= numY; i++)
+	{
+		getline(cin, strMaze);
+		for (int j = 1; j <= numX; j++)
+		{
+			listMaze[i][j] = strMaze[j - 1] - '0';
+		}
+	}
+
+	queDot.push(pair<int, int>(1, 1));
+	listValue[1][1]++;
+	while (!queDot.empty())
+	{
+		tmpDot = queDot.front();
+		queDot.pop();
+		numBase = listValue[tmpDot.Y][tmpDot.X];
+		for (int i = 0; i < NUM_WAYPOINT; i++)
+		{
+			tmpY = tmpDot.Y + listYDir[i];
+			tmpX = tmpDot.X + listXDir[i];
+			if (listMaze[tmpY][tmpX] == 1 && listValue[tmpY][tmpX] == 0) {
+				queDot.push(pair<int, int>(tmpY, tmpX));
+				listValue[tmpY][tmpX] = numBase + 1;
+			}
+		}
+	}
+
+	cout << listValue[numY][numX];
+	return 0;
+}

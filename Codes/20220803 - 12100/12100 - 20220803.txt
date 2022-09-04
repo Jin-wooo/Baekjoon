@@ -1,0 +1,122 @@
+#include <iostream>
+#include <vector>
+#include <queue>
+
+#define NORTH 0
+#define EAST 1
+#define WEST 2
+#define SOUTH 3
+
+using namespace std;
+
+int numSize = 0, cnt;
+int gamePad[6][20][20] = { 0, };
+
+//enum Way {
+//	NORTH,
+//	EAST,
+//	WEST, 
+//	SOUTH
+//};
+
+void slider(int way, int step) {
+	int tmpList[20][20] = { 0, }; // 이전 인덱스 상황을 회전시킨 결과물 저장
+	int i, j, idx = step - 1;
+	switch (way)// 다 왼쪽으로 밀린 것처럼 작업할거라 왼쪽 방향으로 맞추는 작업
+	{
+	case NORTH:
+		for (i = 0; i < numSize; i++) {
+			for (j = 0; j < numSize; j++) {
+				if (gamePad[idx][i][j] != 0) {
+					tmpList[numSize - 1 - j][i] = gamePad[idx][i][j];
+				}
+			}
+		}
+		break;
+	case EAST:
+		for (i = 0; i < numSize; i++) {
+			for (j = 0; j < numSize; j++) {
+				if (gamePad[idx][i][j] != 0) {
+					tmpList[numSize - 1 - i][numSize - 1 - j] = gamePad[idx][i][j];
+				}
+			}
+		}
+		break;
+	case WEST: // 왼쪽으로 민 거라 다른 처리가 필요없음
+		for (i = 0; i < numSize; i++) {
+			for (j = 0; j < numSize; j++) {
+				if (gamePad[idx][i][j] != 0) {
+					tmpList[i][j] = gamePad[idx][i][j];
+				}
+			}
+		}
+		break;
+	case SOUTH:
+		for (i = 0; i < numSize; i++) {
+			for (j = 0; j < numSize; j++) {
+				if (gamePad[idx][i][j] != 0) {
+					tmpList[j][numSize - 1 - i] = gamePad[idx][i][j];
+				}
+			}
+		}
+		break;
+	default:
+		break;
+	}
+	int slideIdx = 0, pastVal = -1;
+	for (int y = 0; y < numSize; y++)
+	{
+		for (int x = 0; x < numSize; x++)
+		{
+			gamePad[step][y][x] = 0;
+			if (tmpList[y][x] != 0) {
+				if (tmpList[y][x] != pastVal) {
+					gamePad[step][y][slideIdx++] = tmpList[y][x];
+					pastVal = tmpList[y][x];
+				}
+				else {
+					gamePad[step][y][slideIdx - 1] = pastVal * 2;
+					pastVal = 0;
+					
+				}
+				if (cnt < gamePad[step][y][slideIdx - 1]) {
+					cnt = gamePad[step][y][slideIdx - 1];
+				}
+			}
+		}
+		pastVal = 0;
+		slideIdx = 0;
+	}
+	if (step < 5) {
+		for (int q = 0; q < 4; q++)
+		{
+			slider(q, step + 1);
+		}
+	}
+}
+
+int main(void) {
+
+	// 입력 고속화
+	ios::sync_with_stdio(0);
+	cin.tie(0);
+	cout.tie(0);
+
+	cin >> numSize;
+
+	for (int y = 0; y < numSize; y++)
+	{
+		for (int x = 0; x < numSize; x++)
+		{
+			cin >> gamePad[0][y][x];
+		}
+	}
+
+	for (int q = 0; q < 4; q++)
+	{
+		slider(q, 1);
+	}
+
+	cout << cnt;
+	return 0;
+}

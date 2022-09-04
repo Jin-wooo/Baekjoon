@@ -1,0 +1,45 @@
+import java.io.BufferedWriter
+import java.io.OutputStreamWriter
+
+var cards = IntArray(500000)
+
+fun getStartPoint(target : Int, len : Int) : Int {
+    var left = 0; var right = len; var mid = 0
+    while (left < right) {
+        mid = (left + right) / 2
+        // 첫 지점을 찾는 거라 같으면 왼쪽으로 이동
+        if (cards[mid] >= target)   right = mid
+        else                        left = mid + 1
+    }
+    return left
+}
+
+fun getEndPoint(target : Int, len : Int) : Int {
+    var left = 0; var right = len; var mid = 0
+    while (left < right) {
+        mid = (left + right) / 2
+        // 끝 지점을 찾는 거라 같으면 오른쪽으로 이동
+        if (cards[mid] > target)   right = mid
+        else                        left = mid + 1
+    }
+    return left
+}
+
+fun main() = with (System.`in`.bufferedReader()) {
+    val cardLim = readLine().toInt()
+    cards = readLine().split(" ").map { it.toInt() }.toIntArray()
+    val quesLim = readLine().toInt()
+    val quests = readLine().split(" ").map { it.toInt() }
+    var tmp : Int; var start : Int; var end : Int
+    val bw = BufferedWriter(OutputStreamWriter(System.out))
+
+    cards.sort()
+    for (iter in quests) {
+        start = getStartPoint(iter, cardLim)
+        end = getEndPoint(iter, cardLim)
+	bw.write("${end - start} ")
+    }
+
+    bw.flush()
+    bw.close()
+}

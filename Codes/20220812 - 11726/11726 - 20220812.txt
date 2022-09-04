@@ -1,0 +1,15 @@
+fun main(args: Array<String>) = with (System.`in`.bufferedReader()) {
+    val vert = readLine().toInt()
+    if (vert <= 2) {
+        println(vert)
+        return
+    }
+    val squareArray = IntArray(vert + 1)
+    squareArray[1] = 1
+    squareArray[2] = 2
+    for (iter in 3..vert) {
+        squareArray[iter] = (squareArray[iter - 1] + squareArray[iter - 2]) % 10007
+    }
+
+    println(squareArray[vert])
+}

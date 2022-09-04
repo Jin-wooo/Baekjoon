@@ -1,0 +1,4 @@
+없음 - 굳이 기록 안함
+Solved - 잘 풀었어요
+SWA - (Solved With Answer) 답지를 거의 보고 풀었음.
+Studied - 아예 처음부터 끝까지 하나도 몰라서 공부하면서 풀었음

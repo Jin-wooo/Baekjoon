@@ -1,0 +1,32 @@
+import kotlin.math.min
+
+fun main() = with (System.`in`.bufferedReader()) {
+    val (numLim, target) = readLine().split(" ").map{ it.toInt() }
+    val nums = IntArray(numLim)
+
+    repeat(numLim) {
+        nums[it] = readLine().toInt()
+    }
+    nums.sort()
+
+    var frontPtr = 0; var backPtr = 0;
+    var numMin = Int.MAX_VALUE; var hold : Int
+    while (frontPtr < numLim && backPtr < numLim) {
+        hold = nums[frontPtr] - nums[backPtr]
+        if (hold >= target) {
+            numMin = min(numMin, hold)
+            backPtr++
+        }
+        else frontPtr++
+    }
+
+    frontPtr--
+    while (backPtr < frontPtr) {
+        hold = nums[frontPtr] - nums[backPtr]
+        if (hold >= target)
+            numMin = min(numMin, hold)
+        backPtr++
+    }
+
+    println(numMin)
+}

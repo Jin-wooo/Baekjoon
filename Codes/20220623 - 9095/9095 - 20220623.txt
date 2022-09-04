@@ -1,0 +1,27 @@
+import java.util.*
+import kotlin.collections.ArrayList
+
+fun main(args: Array<String>) = with(Scanner(System.`in`)) {
+    var numLim = nextInt()
+    var listAns = ArrayList<Int>()
+    var listPlus = ArrayList<Int>()
+    var numTar = 0
+
+    listPlus.add(0)
+    listPlus.add(1)
+    listPlus.add(2)
+    listPlus.add(4)
+    for (i in 0 until numLim) {
+        numTar = nextInt()
+        if (numTar > 3) {
+            for (j in 4..numTar) {
+                listPlus.add(j,  listPlus[j - 1] + listPlus[j - 2] + listPlus[j - 3])
+            }
+        }
+        listAns.add(listPlus[numTar])
+    }
+
+    for (k in listAns) {
+        println(k)
+    }
+}

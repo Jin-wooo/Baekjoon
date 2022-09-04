@@ -1,0 +1,44 @@
+fun main(args: Array<String>) = with (System.`in`.bufferedReader()) {
+    val (rester, addRester, roadLen) = readLine().split(" ").map { it.toInt() }
+    val distArray = IntArray(rester + 1) // 휴게소 사이의 거리니까
+    
+    if (rester != 0) {
+        val resterArray = readLine().split(" ").map { it.toInt() }.toIntArray()
+
+        // 휴게소 사이의 거리를 리스트로 만들어줍니다.
+        resterArray.sort()
+        distArray[0] = resterArray[0] - 0
+        distArray[distArray.size - 1] = roadLen - resterArray[resterArray.size - 1]
+        for (i in 1 until distArray.size - 1) {
+            distArray[i] = resterArray[i] - resterArray[i - 1]
+        }
+    }
+    else {
+        distArray[0] = roadLen
+    }
+
+
+    // 해답을 구하기 위해 parametric search를 시작합니다.
+    var (left, right, mid) = arrayOf(1, roadLen - 1, 0)
+    var holder: Int; var cnt = 0; var oldMid = 0
+
+    while (left <= right) {
+        mid = (left + right) / 2
+
+        for (iter in distArray) {
+            holder = iter
+            while (holder > mid) {
+                holder -= mid
+                cnt++
+            }
+        }
+        // 더 있을지도 모르니까 추가 탐색
+        if (cnt > addRester) left = mid + 1
+        else right = mid - 1
+
+        // 변수 초기화
+        cnt = 0
+    }
+
+    println(left)
+}

@@ -1,0 +1,23 @@
+fun main() = with (System.`in`.bufferedReader()) {
+    val (lineLim, targetLim) = readLine().split(" ").map{ it.toInt() }
+    val lines = IntArray(lineLim)
+
+    repeat(lineLim) {
+        lines[it] = readLine().toInt()
+    }
+
+    var cnt : Long;
+    var left : Long = 1; var right = lines.maxOf { it }.toLong(); var mid : Long
+
+    while (left < right) {
+        cnt = 0
+        mid = (left + right + 1) / 2
+
+        for (iter in lines) cnt += iter / mid
+
+        if (cnt >= targetLim)   left = mid
+        else                    right = mid - 1
+    }
+
+    println(left)
+}

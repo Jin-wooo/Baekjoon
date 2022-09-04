@@ -1,0 +1,179 @@
+#include <iostream>
+#include <vector>
+#include <queue>
+#include <math.h>
+
+#define MAX_OFFICE_SIZE 8
+#define MAX_WAYPT 4
+#define X second
+#define Y first
+#define NORTH 0
+#define EAST 1
+#define SOUTH 2
+#define WEST 3
+
+using namespace std;
+
+int N, M, numArea;
+int office[MAX_OFFICE_SIZE][MAX_OFFICE_SIZE] = { 0, };
+queue<pair<int, int>> recoverQ;
+
+int updater(int way, pair<int, int> pt) {
+	int b, cnt = 0;
+	switch (way % 4)
+	{
+	case NORTH:
+		for (b = pt.Y - 1; b >= 0; b--) {
+			if (office[b][pt.X] == 6) {
+				break;
+			}
+			if (office[b][pt.X] == 0) {
+				cnt++;
+				office[b][pt.X] = 8;
+				recoverQ.push(make_pair(b, pt.X));
+			}
+		}
+		break;
+	case EAST:
+		for (b = pt.X + 1; b < M; b++) {
+			if (office[pt.Y][b] == 6) {
+				break;
+			}
+			if (office[pt.Y][b] == 0) {
+				cnt++;
+				office[pt.Y][b] = 8;
+				recoverQ.push(make_pair(pt.Y, b));
+
+			}
+		}
+		break;
+	case SOUTH:
+		for (b = pt.Y + 1; b < N; b++) {
+			if (office[b][pt.X] == 6) {
+				break;
+			}
+			if (office[b][pt.X] == 0) {
+				cnt++;
+				office[b][pt.X] = 8;
+				recoverQ.push(make_pair(b, pt.X));
+			}
+		}
+		break;
+	case WEST:
+		for (b = pt.X - 1; b >= 0; b--) {
+			if (office[pt.Y][b] == 6) {
+				break;
+			}
+			if (office[pt.Y][b] == 0) {
+				cnt++;
+				office[pt.Y][b] = 8;
+				recoverQ.push(make_pair(pt.Y, b));
+			}
+		}
+		break;
+	default:
+		break;
+	}
+	return cnt;
+}
+
+int main(void) {
+
+	// 입력 고속화
+	ios::sync_with_stdio(0);
+	cin.tie(0);
+	cout.tie(0);
+
+	vector<pair<int, int>> vecCCTV;
+	vector<pair<int, int>> vecFive;
+	
+	int tmp, ans = 999;
+	int limdiv = 0, tmpArea = 0;
+	pair<int, int> tmpPt;
+	cin >> N >> M;
+
+	for (int y = 0; y < N; y++)
+	{
+		for (int x = 0; x < M; x++)
+		{
+			cin >> tmp;
+			office[y][x] = tmp;
+			if (tmp == 0) {
+				numArea++;
+			}
+			else if (tmp != 6) {
+				if (tmp == 5) {
+					vecFive.push_back(make_pair(y, x));
+				}
+				else {
+					vecCCTV.push_back(make_pair(y, x));
+				}
+
+			}
+		}
+	}
+
+	// 5는 돌릴 여지가 없으므로 미리 다 채워버린다.
+	for (int i = 0; i < vecFive.size(); i++)
+	{
+		for (int j = 0; j < MAX_WAYPT; j++)
+		{
+			numArea -= updater(j, vecFive[i]);
+		}
+	}
+
+	while (!recoverQ.empty()) { // 이 짓을 왜하나 싶죠? 저도 그렇게 생각해요...
+		recoverQ.pop();
+	}
+
+	int forcelim = pow(4, vecCCTV.size()); // Brute-force용
+	for (int f = 0; f < forcelim; f++)
+	{
+		limdiv = f;
+		tmpArea = numArea;
+		for (int v = 0; v < vecCCTV.size(); v++)
+		{
+			// 해당 인덱스 탐색 시작
+			switch (office[vecCCTV[v].Y][vecCCTV[v].X])
+			{
+			case 1:
+				tmpArea -= updater(limdiv, vecCCTV[v]);
+				break;
+			case 2:
+				tmpArea -= (updater(limdiv, vecCCTV[v]) + 
+							updater(limdiv + 2, vecCCTV[v]));
+				break;
+			case 3:
+				tmpArea -= (updater(limdiv, vecCCTV[v]) + 
+							updater(limdiv + 1, vecCCTV[v]));
+				break;
+			case 4:
+				tmpArea -= (updater(limdiv, vecCCTV[v]) + 
+							updater(limdiv + 1, vecCCTV[v]) + 
+							updater(limdiv + 2, vecCCTV[v]));
+				break;
+			default:
+				cout << "OOps!";
+				break;
+			}
+
+			if (limdiv != 0) {
+				limdiv /= 4; // 0이면 에러가 나니까
+			}
+		}
+
+		if (ans >= tmpArea) {
+			ans = tmpArea;
+		}
+
+		while (!recoverQ.empty())
+		{
+			tmpPt = recoverQ.front();
+			recoverQ.pop();
+			office[tmpPt.Y][tmpPt.X] = 0;
+		}
+	}
+
+	cout << ans;
+	return 0;
+}

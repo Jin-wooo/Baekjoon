@@ -1,0 +1,65 @@
+#include <iostream>
+#include <string>
+#include <vector>
+
+#define MAX_STACK_SIZE 50000
+
+using namespace std;
+
+class TmpStack {
+public:
+	TmpStack();
+	void push(int x) { stack[++headPtr] = x; }
+	int pop() { return headPtr == -1 ? -1 : stack[headPtr--]; }
+	int size() const { return headPtr + 1; }
+	int empty() const { return headPtr >= 0 ? 0 : 1; }
+	int top() { return headPtr == -1 ? -1 : stack[headPtr]; }
+private:
+	int stack[MAX_STACK_SIZE] = { 0, };
+	int headPtr;
+};
+
+TmpStack::TmpStack()
+{
+	headPtr = -1;
+}
+
+int main(void) {
+	// 입력 고속화
+	ios::sync_with_stdio(0);
+	cin.tie(0);
+
+	int numTest, numTar;
+	string strComm;
+	TmpStack tmpstack;
+	cin >> numTest;
+	vector<int> vecAns;
+	vecAns.reserve(numTest / 2);
+
+	for (int i = 0; i < numTest; i++)
+	{
+		cin >> strComm;
+		if (strComm.compare("push") == 0) {
+			cin >> numTar;
+			tmpstack.push(numTar);
+		}
+		else if (strComm.compare("pop") == 0) {
+			vecAns.push_back(tmpstack.pop());
+		}
+		else if (strComm.compare("size") == 0) {
+			vecAns.push_back(tmpstack.size());
+		}
+		else if (strComm.compare("empty") == 0) {
+			vecAns.push_back(tmpstack.empty());
+		}
+		else if (strComm.compare("top") == 0) {
+			vecAns.push_back(tmpstack.top());
+		}
+	}
+
+	for (int ans : vecAns) {
+		cout << ans << "\n";
+	}
+
+	return 0;
+}

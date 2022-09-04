@@ -1,0 +1,115 @@
+#include <iostream>
+#include <vector>
+
+#define Y first
+#define X second
+#define MAX_ROTATE 4
+
+using namespace std;
+
+int hor, ver, numStick, cnt = 0;
+int notebook[40][40] = { 0, };
+vector<pair<int, int>> vecSize;
+vector<vector<pair<int, int>>> vecPos;
+
+void attacher(int idx, int fill) {
+	if (idx == numStick) {
+		if (cnt < fill) {
+			cnt = fill;
+		}
+		return;
+	}
+	int tmpSwp = 0;
+	bool isAttached = false, canAttach = true;
+	for (int rot = 0; rot < MAX_ROTATE; rot++)
+	{
+		if (vecSize[idx].Y <= ver && vecSize[idx].X <= hor) { // 스티커가 범위 안이면
+			for (int y = 0; y < ver; y++)
+			{
+				if (y + vecSize[idx].Y <= ver) { // 세로 길이가 초과되지 않으면
+					for (int x = 0; x < hor; x++)
+					{
+						if (x + vecSize[idx].X <= hor) { // 가로 길이가 초과되지 않으면
+							canAttach = true;
+							for (auto& iChk : vecPos[idx]) { // 붙일 영역 체크
+								if (notebook[y + iChk.Y][x + iChk.X] != 0) {
+									canAttach = false;
+									break;
+								}
+							}
+							if (canAttach) {
+								for (auto& iStick : vecPos[idx]) { // 붙임
+									notebook[y + iStick.Y][x + iStick.X] = 1;
+								}
+								isAttached = true;
+								attacher(idx + 1, fill + vecPos[idx].size()); // 다음 스티커 붙이기 시작
+								for (auto& iStick : vecPos[idx]) { // 스티커 떼기
+									notebook[y + iStick.Y][x + iStick.X] = 0;
+								}
+							}
+						}
+						else { // 가로 길이가 안맞아요
+							break;
+						}
+					}
+				}
+				else { // 세로 길이가 안맞아요
+					break;
+				}
+			}
+		// 범위 안이라면 붙이는 작업 수행
+		// 범위 밖이라면 바로 회전으로 들어감
+		}
+		
+		if (rot == 3) {
+			attacher(idx + 1, fill); // 이번 스티커를 버립니다.
+		}
+		else if (isAttached) {
+			return;
+		}
+		else {
+			// 회전! (1회 수행할때마다 각도가 90도씩 이동합니다.
+			swap(vecSize[idx].Y, vecSize[idx].X);
+			for (auto& iSwap : vecPos[idx]) {
+				tmpSwp = iSwap.X;
+				iSwap.X = vecSize[idx].X - 1 - iSwap.Y;
+				iSwap.Y = tmpSwp;
+			}
+		}
+	}
+
+}
+
+int main(void) {
+
+	// 입력 고속화
+	ios::sync_with_stdio(0);
+	cin.tie(0);
+	cout.tie(0);
+
+	cin >> ver >> hor >> numStick;
+
+	int R, C, tmp;
+
+
+	for (int iterStick = 0; iterStick < numStick; iterStick++)
+	{
+		cin >> R >> C;
+		vecSize.push_back(make_pair(R, C));
+		vecPos.push_back(vector<pair<int, int>>(0));
+		for (int r = 0; r < R; r++)
+		{
+			for (int c = 0; c < C; c++)
+			{
+				cin >> tmp;
+				if (tmp == 1) {
+					vecPos[iterStick].push_back(make_pair(r, c));
+				}
+			}
+		}
+	}
+
+	attacher(0, 0);
+	cout << cnt;
+	return 0;
+}

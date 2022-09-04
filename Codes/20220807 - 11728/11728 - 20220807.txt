@@ -1,0 +1,40 @@
+import java.io.BufferedWriter
+import java.io.OutputStreamWriter
+import java.util.*
+
+fun main(args: Array<String>) = with(System.`in`.bufferedReader()) {
+    val (a, b) = readLine().split(" ").map { it.toInt() }
+    val aList = readLine().split(" ").map { it.toInt() }
+    val bList = readLine().split(" ").map { it.toInt() }
+
+    var ansList = arrayListOf<Int>()
+    var aIdx = 0
+    var bIdx = 0
+
+    while ((aIdx < a) and (bIdx < b)) {
+        if (aList[aIdx] >= bList[bIdx]) {
+            ansList.add(bList[bIdx++])
+        }
+        else {
+            ansList.add(aList[aIdx++])
+        }
+    }
+
+    if (aIdx == a) {
+        for (bf in bIdx..b - 1) {
+            ansList.add(bList[bf])
+        }
+    }
+    else {
+        for (af in aIdx..a - 1) {
+            ansList.add(aList[af])
+        }
+    }
+
+    val bw = BufferedWriter(OutputStreamWriter(System.out))
+    bw.write(ansList.joinToString(" "))
+    bw.flush()
+    bw.close()
+
+//    println(ansList.joinToString(" "))
+}

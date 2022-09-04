@@ -1,0 +1,73 @@
+#include <iostream>
+#include <vector>
+#include <queue>
+
+using namespace std;
+
+int main(void) {
+
+	// 입력 고속화
+	ios::sync_with_stdio(0);
+	cin.tie(0);
+	int numX, numY, numPt, tmpX, tmpY;
+	int numDraw = 0, numMaxSize = 0, numTmpSize = 0;
+	cin >> numY >> numX;
+
+	vector<bool> vecAns;
+	queue<pair<int, int>> queDot;
+	pair<int, int> tmpDot;
+	int listDraw[502][502] = { 0, };
+	int listYDir[4] = { -1, 0, 1, 0 };
+	int listXDir[4] = { 0, 1, 0, -1 };
+	bool listVisit[502][502] = { false, };
+
+	for (int i = 1; i <= numY; i++)
+	{
+		for (int j = 1; j <= numX; j++)
+		{
+			cin >> numPt;
+			listDraw[i][j] = numPt;
+		}
+	}
+
+	for (int y = 1; y <= numY; y++)
+	{
+		for (int x = 1; x <= numX; x++)
+		{
+			if (listDraw[y][x] == 1 && !listVisit[y][x]) {
+				queDot.push(pair<int, int>(x, y));
+				listVisit[y][x] = true;
+				numTmpSize = 0;
+				numDraw++;
+				while (!queDot.empty())
+				{
+					tmpDot = queDot.front();
+					queDot.pop();
+					numTmpSize++;
+					for (int c = 0; c < 4; c++)
+					{
+						tmpY = tmpDot.second + listYDir[c];
+						tmpX = tmpDot.first + listXDir[c];
+						if (listDraw[tmpY][tmpX] == 1
+							&& !listVisit[tmpY][tmpX]) {
+							queDot.push(pair<int, int>(tmpX, tmpY));
+							listVisit[tmpY][tmpX] = true;
+						}
+					}
+				}
+				if (numMaxSize < numTmpSize) {
+					numMaxSize = numTmpSize;
+				}
+			}
+		}
+	}
+
+	cout << numDraw << "\n" << numMaxSize;
+
+	//for (int ans : vecAns) {
+
+	//}
+
+	getchar();
+	return 0;
+}

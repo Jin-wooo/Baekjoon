@@ -1,0 +1,30 @@
+#include <iostream>
+#include <math.h>
+
+using namespace std;
+
+void hanoi(int disk, int st, int md, int ed) {
+	if (disk == 1) {
+		cout << st << " " << ed << "\n";
+	}
+	else {
+		hanoi(disk - 1, st, ed, md);
+		cout << st << " " << ed << "\n";
+		hanoi(disk - 1, md, st, ed);
+	}
+}
+
+int main(void) {
+
+	// 입력 고속화
+	ios::sync_with_stdio(0);
+	cin.tie(0);
+	cout.tie(0);
+
+	int tar;
+	cin >> tar;
+	int tmp = pow(2, tar);
+	cout << tmp - 1 << "\n";
+	hanoi(tar, 1, 2, 3);
+	return 0;
+}

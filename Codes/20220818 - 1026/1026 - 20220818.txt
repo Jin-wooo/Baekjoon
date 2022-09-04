@@ -1,0 +1,15 @@
+fun main(args: Array<String>) = with (System.`in`.bufferedReader()) {
+    val listSize = readLine().toInt()
+    val aArray = readLine().split(" ").map { it.toInt() }.toIntArray()
+    val bArray = readLine().split(" ").map { it.toInt() }.toIntArray()
+
+    aArray.sort()
+    bArray.sortDescending()
+
+    var ans = 0
+    repeat(listSize) {
+        ans += aArray[it] * bArray[it]
+    }
+
+    println(ans)
+}

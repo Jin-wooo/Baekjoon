@@ -1,0 +1,23 @@
+fun main(args: Array<String>) = with (System.`in`.bufferedReader()) {
+    val meetings = readLine().toInt()
+    val scheduleArray = Array(meetings) { Pair(0, 0) }
+    var numRead: List<Int>
+
+    repeat(meetings) {
+        numRead = readLine().split(" ").map { it.toInt() }
+        scheduleArray[it] = Pair(numRead[0], numRead[1])
+    }
+
+    scheduleArray.sortWith(compareBy<Pair<Int, Int>> { it.second }.thenBy { it.first })
+
+    var ans = 0
+    var timeLine = 0
+    for (iter in scheduleArray) {
+        if (timeLine <= iter.first) {
+            timeLine = iter.second
+            ans++
+        }
+    }
+
+    println(ans)
+}

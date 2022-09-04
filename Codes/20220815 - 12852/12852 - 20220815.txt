@@ -1,0 +1,43 @@
+import java.io.BufferedWriter
+import java.io.OutputStreamWriter
+import kotlin.collections.ArrayDeque
+
+fun main(args: Array<String>) = with (System.`in`.bufferedReader()) {
+    val numTar = readLine().toInt()
+    val calcArray = IntArray(numTar + 1) { 999999 }
+    val distArray = IntArray(numTar + 1)
+    val tripleArray = IntArray(3)
+    var numPop : Int
+    var numTmp : Int
+    val arrayDeque = ArrayDeque<Int>()
+    arrayDeque.add(1)
+    calcArray[1] = 0
+
+    while (arrayDeque.isNotEmpty()) {
+        numPop = arrayDeque.first()
+        arrayDeque.removeFirst()
+
+        tripleArray[0] = numPop * 2
+        tripleArray[1] = numPop * 3
+        tripleArray[2] = numPop + 1
+        for (iter in tripleArray) {
+            if (iter <= numTar && calcArray[iter] > calcArray[numPop] + 1) {
+                calcArray[iter] = calcArray[numPop] + 1
+                distArray[iter] = numPop
+                arrayDeque.add(iter)
+            }
+        }
+
+    }
+
+    val bw = BufferedWriter(OutputStreamWriter(System.out))
+    var numPrint : Int = numTar
+    bw.write("${calcArray[numPrint]}\n")
+    while (numPrint > 0) {
+        bw.write("$numPrint ")
+        numPrint = distArray[numPrint]
+    }
+
+    bw.flush()
+    bw.close()
+}

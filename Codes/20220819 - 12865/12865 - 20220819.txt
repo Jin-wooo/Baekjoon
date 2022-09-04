@@ -1,0 +1,20 @@
+import kotlin.math.max
+
+fun main(args: Array<String>) = with (System.`in`.bufferedReader()) {
+    val (numProd, weiLim) = readLine().split(" ").map { it.toInt() }
+    val dper = IntArray(weiLim + 1) { 0 }
+    val items = Array(numProd) {Pair(0, 0)}
+    var tmp = List(2) { 0 }
+    repeat(numProd) {
+        tmp = readLine().split(" ").map { it.toInt() }
+        items[it] = Pair(tmp[0], tmp[1])
+    }
+
+    for (iter in items) {
+        for (i in weiLim downTo iter.first) {
+            dper[i] = max(dper[i], dper[i - iter.first] + iter.second)
+        }
+    }
+
+    println(dper[weiLim])
+}

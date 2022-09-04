@@ -1,0 +1,16 @@
+import kotlin.math.min
+
+fun main() = with (System.`in`.bufferedReader()) {
+    val house = readLine().toInt()
+    val paintArray = Array(house) { IntArray(3) }
+    paintArray[0] = readLine().split(" ").map { it.toInt() }.toIntArray()
+
+    repeat(house - 1) {
+        val (r, g, b) = readLine().split(" ").map { it.toInt() }
+        paintArray[it + 1][0] = min(paintArray[it][1], paintArray[it][2]) + r
+        paintArray[it + 1][1] = min(paintArray[it][0], paintArray[it][2]) + g
+        paintArray[it + 1][2] = min(paintArray[it][0], paintArray[it][1]) + b
+    }
+
+    println(minOf(paintArray[house - 1][0], paintArray[house - 1][1], paintArray[house - 1][2]))
+}

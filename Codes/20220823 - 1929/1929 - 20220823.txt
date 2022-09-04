@@ -1,0 +1,28 @@
+import java.io.BufferedWriter
+import java.io.OutputStreamWriter
+
+fun main() = with (System.`in`.bufferedReader()) {
+    val (start, end) = readLine().split(" ").map { it.toInt() }
+    val primeArray = BooleanArray(end + 1) { true }
+    val bw = BufferedWriter(OutputStreamWriter(System.out))
+
+    primeArray[1] = false
+    var cnt = 2
+    while (cnt * cnt <= end) {
+        if (primeArray[cnt]) {
+            for (j in cnt * cnt..end step cnt) {
+                primeArray[j] = false
+            }
+        }
+        cnt++
+    }
+
+    for (k in start..end) {
+        if (primeArray[k]) {
+            bw.write("$k\n")
+        }
+    }
+
+    bw.flush()
+    bw.close()
+}

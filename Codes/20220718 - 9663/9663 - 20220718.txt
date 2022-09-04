@@ -1,0 +1,45 @@
+#include <iostream>
+
+using namespace std;
+
+// 이론상 대각선을 리스트화시켰을때 필요한 총 리스트의 길이는 29정도. 2 * 15 - 1
+bool rdlist[30] = { false, };	// right down list
+bool ldlist[30] = { false, };	// Left down list
+bool dlist[15] = { false, };	// down list
+int cnt = 0;
+
+void queens(int& n, int qs) {
+	if (qs == n) {
+		cnt++;
+		return;
+	}
+	for (int i = 0; i < n; i++)
+	{
+		 if (!rdlist[n - 1 - qs + i] &&
+			 !ldlist[qs + i] && !dlist[i]) {
+			 rdlist[n - 1 - qs + i] = true;
+			 ldlist[qs + i] = true;
+			 dlist[i] = true;
+			 queens(n, qs + 1);
+			 rdlist[n - 1 - qs + i] = false;
+			 ldlist[qs + i] = false;
+			 dlist[i] = false;
+		 }
+	}
+}
+
+int main(void) {
+
+	// 입력 고속화
+	ios::sync_with_stdio(0);
+	cin.tie(0);
+	cout.tie(0);
+
+	int n = 0;
+	cin >> n;
+
+	queens(n, 0);
+	cout << cnt;
+
+	return 0;
+}

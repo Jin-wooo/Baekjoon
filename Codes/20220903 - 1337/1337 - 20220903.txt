@@ -1,0 +1,31 @@
+import kotlin.math.min
+
+fun main() = with (System.`in`.bufferedReader()) {
+    val lim = readLine().toInt()
+    val nums = IntArray(lim)
+
+    if (lim == 0) {
+        println(5)
+        return
+    }
+
+    repeat(lim) {
+        nums[it] = readLine().toInt()
+    }
+    nums.sort()
+
+    var emptyCnt = 4; var fiveCnt = 1; var ans = 9
+    for (i in nums.indices) {
+        emptyCnt = 0
+        fiveCnt = 1
+        for (j in i + 1 until lim) {
+            if (nums[j] - nums[i] > 4) { // 5연속이 될 가망 X
+                break
+            }
+            emptyCnt += nums[j] - nums[j - 1] - 1
+            fiveCnt += nums[j] - nums[j - 1]
+        }
+        ans = min(ans, emptyCnt + (5 - fiveCnt))
+    }
+    println(ans)
+}

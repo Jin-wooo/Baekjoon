@@ -1,0 +1,13 @@
+val combi = Array(1001){Array(1001){ 0 } }
+
+fun factorial(n : Int, k : Int) : Int {
+    if (combi[n][k] != 0)       return combi[n][k]
+    else if (k == 0 || n == k)  combi[n][k] = 1
+    else combi[n][k] = (factorial(n - 1, k - 1) + factorial(n - 1, k)) % 10007
+    return combi[n][k]
+}
+
+fun main() = with (System.`in`.bufferedReader()) {
+    var (n, k) = readLine().split(" ").map { it.toInt() }
+    println(factorial(n, k))
+}

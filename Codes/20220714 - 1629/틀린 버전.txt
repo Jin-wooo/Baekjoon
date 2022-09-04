@@ -1,0 +1,39 @@
+#include <iostream>
+#include <math.h>
+
+using namespace std;
+
+int moder(int& a, int b, int& c) {
+	int tmp;
+	if (b == 1) {
+		return a % c;
+	}
+
+	long long ltmp;
+	if (b % 2 == 0) {
+		tmp = moder(a, b / 2, c);
+		ltmp = pow(tmp, 2);
+		return ltmp % c;
+	}
+	else {
+		tmp = moder(a, (b - 1) / 2, c);
+		ltmp = pow(tmp, 2);
+		return (ltmp * a) % c;
+	}
+}
+
+int main(void) {
+
+	// 입력 고속화
+	ios::sync_with_stdio(0);
+	cin.tie(0);
+
+	int A, B, C;
+	cin >> A >> B >> C;
+
+	int answer = 0;
+	answer = moder(A, B, C);
+
+	cout << answer;
+	return 0;
+}

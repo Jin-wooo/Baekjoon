@@ -1,0 +1,24 @@
+import java.io.BufferedWriter
+import java.io.OutputStreamWriter
+import java.util.*
+
+fun main(args: Array<String>) = with (System.`in`.bufferedReader()){
+    val lim = readLine().toInt()
+    val holder = IntArray(2000001)
+    var tmp : Int
+    repeat(lim) {
+        tmp = readLine().toInt()
+        holder[tmp + 1000000]++
+    }
+
+    val bw = BufferedWriter(OutputStreamWriter(System.out))
+    for (i in holder.indices) {
+        if (holder[i] != 0) {
+            repeat(holder[i]) {
+                bw.write((i - 1000000).toString() + '\n')
+            }
+        }
+    }
+    bw.flush()
+    bw.close()
+}

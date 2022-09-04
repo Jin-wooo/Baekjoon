@@ -1,0 +1,35 @@
+import java.util.*
+import kotlin.collections.ArrayList
+import kotlin.math.max
+
+fun main(args: Array<String>) = with(Scanner(System.`in`)) {
+    var numLim = nextInt()
+    var listStairs = ArrayList<Int>()
+    var listValue = ArrayList<Int>()
+
+    for (i in 0 until numLim) {
+        listStairs.add(nextInt())
+    }
+    if (numLim == 1) {
+        println(listStairs[0])
+    }
+    else if (numLim == 2) {
+        println(listStairs[0] + listStairs[1])
+    }
+    else if (numLim == 3) {
+        println(max(listStairs[0] + listStairs[2], 0 + listStairs[1] + listStairs[2]))
+    }
+    else {
+        listValue.add(listStairs[0])                 // 0번째에서 가장 큰 점수는 자기 점수
+        listValue.add(listStairs[0] + listStairs[1]) // 1번째에서 가장 큰 점수는 이전 계단 + 자기 점수
+        listValue.add(max(                         // 2번째에서 가장 큰 점수는 n-3을 0으로 가정하고 계산
+            listValue[0] + listStairs[2], 0 + listStairs[1] + listStairs[2]
+        ))
+        for (k in 3 until listStairs.size) {
+            listValue.add(max(
+                listStairs[k] + listValue[k - 2],
+                listStairs[k] + listStairs[k - 1] + listValue[k - 3]))
+        }
+        println(listValue[numLim - 1])
+    }
+}
