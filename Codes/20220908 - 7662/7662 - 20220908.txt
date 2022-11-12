@@ -1,0 +1,35 @@
+import java.util.TreeMap
+
+fun main() = with (System.`in`.bufferedReader()) {
+    val testLim = readLine().toInt()
+    var quesLim : Int
+    val dpMap = TreeMap<Int, Int> ()
+    var inputList : List<String>; var hold : Int?; var tmpKey = 0
+    val bw = System.out.bufferedWriter()
+
+    repeat(testLim) {
+        dpMap.clear()
+        quesLim = readLine().toInt()
+        for (i in 0 until quesLim) {
+            inputList = readLine().split(" ")
+            if (inputList[0] == "I") {
+                hold = dpMap[inputList[1].toInt()]
+                dpMap[inputList[1].toInt()] = if (hold == null) 1 else hold!! + 1
+            }
+            else {
+                if (dpMap.isEmpty()) continue
+                else if (inputList[1] == "1")   tmpKey = dpMap.lastKey()
+                else if (inputList[1] == "-1")  tmpKey = dpMap.firstKey()
+
+                hold = dpMap[tmpKey]
+                if (hold == 1) dpMap.remove(tmpKey)
+                else dpMap[tmpKey] = hold!! - 1
+            }
+        }
+
+        if (dpMap.isEmpty())  bw.write("EMPTY\n")
+        else                  bw.write("${dpMap.lastKey()} ${dpMap.firstKey()}\n")
+    }
+    bw.flush()
+    bw.close()
+}

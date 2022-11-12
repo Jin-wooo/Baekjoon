@@ -1,0 +1,24 @@
+import java.io.BufferedWriter
+import java.io.OutputStreamWriter
+
+fun main() = with (System.`in`.bufferedReader()) {
+    val (pokeLim, quesLim) = readLine().split(" ").map { it.toInt() }
+    val bw = BufferedWriter(OutputStreamWriter(System.out))
+    val nameArray = Array(pokeLim + 1) {""}
+    val numMap = HashMap<String, Int>(pokeLim)
+    var tmp : String
+
+    for (i in 1..pokeLim) {
+        nameArray[i] = readLine()
+        numMap[nameArray[i]] = i
+    }
+
+    repeat(quesLim) {
+        tmp = readLine()
+        if (tmp[0].isDigit())   bw.write(nameArray[tmp.toInt()] + "\n")
+        else                    bw.write(numMap[tmp].toString() + "\n")
+    }
+
+    bw.flush()
+    bw.close()
+}

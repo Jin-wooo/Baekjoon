@@ -1,0 +1,25 @@
+import java.util.PriorityQueue
+import kotlin.math.abs
+
+fun main() = with (System.`in`.bufferedReader()) {
+    val pq = PriorityQueue<Pair<Int, Int>>(Comparator{a,b ->
+        if (a.second != b.second) a.second - b.second
+        else a.first - b.first
+    })
+    val lim = readLine().toInt()
+    var ques = 0; var absq = 0
+
+    repeat(lim) {
+        ques = readLine().toInt()
+        if (ques == 0) {
+            if (pq.isEmpty()) {
+                println(0)
+            } else {
+                println(pq.poll().first)
+            }
+        } else {
+            absq = abs(ques)
+            pq.add(ques to absq)
+        }
+    }
+}

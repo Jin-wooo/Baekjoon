@@ -1,0 +1,55 @@
+fun main() = with (System.`in`.bufferedReader()) {
+    val lim = readLine().toInt(); var ques = 0
+    val minHeap = ArrayList<Int>()
+    minHeap.add(-1) // 계산 편의를 위해 0은 X
+
+    fun input(x : Int) {
+        minHeap.add(x)
+        var inIdx = minHeap.size - 1
+        var swapIdx = inIdx / 2
+        while (swapIdx > 0 && minHeap[swapIdx] > x) {
+            minHeap[swapIdx] = x.also { minHeap[inIdx] = minHeap[swapIdx] }
+            inIdx = swapIdx
+            swapIdx /= 2
+        }
+    }
+
+    fun printMin() {
+        if (minHeap.size == 1) {
+            println(0)
+            return
+        }
+        else println(minHeap[1])
+        minHeap[1] = minHeap[minHeap.lastIndex]
+        minHeap.removeAt(minHeap.lastIndex)
+        var nowIdx = 1; var tarIdx = 0; var swapIdx = nowIdx * 2
+        while (swapIdx < minHeap.size) {
+            if (swapIdx == minHeap.lastIndex) {
+                // 노드가 한 쪽에만 달려있음
+                tarIdx = swapIdx
+            }
+            else { // 노드가 양쪽 다 있음
+                tarIdx = when {
+                    minHeap[swapIdx] < minHeap[swapIdx + 1] -> swapIdx
+                    else -> swapIdx + 1
+                }
+            }
+            if (minHeap[nowIdx] > minHeap[tarIdx]) {
+                minHeap[nowIdx] = minHeap[tarIdx].also {
+                    minHeap[tarIdx] = minHeap[nowIdx]
+                }
+            }
+            nowIdx = tarIdx
+            swapIdx = nowIdx * 2
+        }
+    }
+
+    repeat(lim) {
+        ques = readLine().toInt()
+        if (ques == 0) {
+            printMin()
+        } else {
+            input(ques)
+        }
+    }
+}

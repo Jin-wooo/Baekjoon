@@ -1,0 +1,32 @@
+import java.util.TreeMap
+import kotlin.collections.ArrayList
+
+fun main() = with (System.`in`.bufferedReader()) {
+    val (numJewel, numBag) = readLine().split(" ").map { it.toInt() }
+    var jewelVals : List<Int>
+    var jewelList = ArrayList<Pair<Int, Int>>()
+    val bagMap = TreeMap<Int, Int>(); var bagtmp = 0
+    var iterBag : Map.Entry<Int, Int>?; var ans : Long = 0
+
+    repeat (numJewel) {
+        jewelVals = readLine().split(" ").map { it.toInt() }
+        jewelList.add(Pair(jewelVals[0], jewelVals[1]))
+    }
+    repeat(numBag) {
+        bagtmp = readLine().toInt()
+        bagMap[bagtmp] = if (bagMap.containsKey(bagtmp)) bagMap[bagtmp]!! + 1 else 1
+    }
+
+    jewelList.sortWith( compareBy({it.second}, {it.first}))
+    jewelList.reverse()
+    for (iter in jewelList) {
+        iterBag = bagMap.ceilingEntry(iter.first)
+        if (iterBag != null) {
+            ans += iter.second
+            if (iterBag.value == 1) bagMap.remove(iterBag.key)
+            else bagMap[iterBag.key] = iterBag.value - 1
+        }
+    }
+
+    println(ans)
+}

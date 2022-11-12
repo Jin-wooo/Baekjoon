@@ -1,0 +1,23 @@
+import java.io.BufferedWriter
+import java.io.OutputStreamWriter
+
+fun main() = with (System.`in`.bufferedReader()) {
+    val lim = readLine().toInt()
+    val sety = mutableSetOf<String>()
+    var tmp = listOf("")
+    val bw = BufferedWriter(OutputStreamWriter(System.out))
+
+    repeat(lim) {
+        tmp = readLine().split(" ")
+        if (tmp[1] == "enter")  sety.add(tmp[0])
+        else                    sety.remove(tmp[0])
+    }
+
+    var sortedSety = sety.sortedDescending()
+    for (iter in sortedSety) {
+        bw.write("$iter\n")
+    }
+
+    bw.flush()
+    bw.close()
+}

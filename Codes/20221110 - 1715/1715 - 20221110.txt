@@ -1,0 +1,20 @@
+import java.util.PriorityQueue
+
+fun main() = with (System.`in`.bufferedReader()) {
+    val lim = readLine().toInt()
+    val pq = PriorityQueue<Int>()
+    var ans = 0; var target = 0 to 0; var tmp = 0
+
+    repeat(lim) {
+        pq.add(readLine().toInt())
+    }
+
+    while (pq.size > 1) {
+        target = pq.poll() to pq.poll()
+        tmp = target.first + target.second
+        ans += tmp
+        pq.add(tmp)
+    }
+
+    println(ans)
+}
